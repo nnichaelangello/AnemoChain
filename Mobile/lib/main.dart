@@ -424,7 +424,7 @@ class _HomeScreenState extends State<HomeScreen>
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            'ID Anda: $patientId',
+                            'Your ID: $patientId',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -472,7 +472,7 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
                           const SizedBox(height: 16),
                           _buildActionCard(
-                            title: 'Ambil Foto Langsung',
+                            title: 'Take Photo Directly',
                             subtitle: 'Use camera to take a picture',
                             icon: Icons.camera_alt_rounded,
                             color: const Color(0xFF1E88E5),
@@ -488,7 +488,7 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
                           const SizedBox(height: 16),
                           _buildActionCard(
-                            title: 'Riwayat & Sinkronisasi',
+                            title: 'History & Synchronization',
                             subtitle: 'View local screenings and upload images',
                             icon: Icons.cloud_sync_rounded,
                             color: const Color(0xFF43A047),
@@ -529,9 +529,9 @@ class _AnalyzingScreenState extends State<AnalyzingScreen>
     with SingleTickerProviderStateMixin {
   int _currentStep = 0;
   final List<String> _steps = [
-    "Mengekstrak Fitur Gambar...",
-    "Inferensi Edge AI...",
-    "Menyimpan Data Rekam Medis...",
+    "Extracting Image Features...",
+    "Edge AI Inference...",
+    "Saving Medical Record Data...",
   ];
 
   @override
@@ -565,7 +565,7 @@ class _AnalyzingScreenState extends State<AnalyzingScreen>
         return;
       }
       if (response.statusCode != 200)
-        throw Exception("Prediksi gagal (HTTP ${response.statusCode})");
+        throw Exception("Prediction failed (HTTP ${response.statusCode})");
       var json = jsonDecode(responseData);
 
       // 2. Automatically sync JSON to Blockchain immediately (Blockchain First logic)
@@ -682,7 +682,7 @@ class _AnalyzingScreenState extends State<AnalyzingScreen>
             ),
             const SizedBox(height: 12),
             const Text(
-              "Pastikan foto memenuhi syarat berikut:",
+              "Ensure the photo meets these requirements:",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
             ),
             const SizedBox(height: 8),
@@ -733,7 +733,7 @@ class _AnalyzingScreenState extends State<AnalyzingScreen>
           children: [
             Icon(Icons.error_outline, color: Colors.red),
             SizedBox(width: 10),
-            Text("Koneksi Error"),
+            Text("Connection Error"),
           ],
         ),
         content: Text(message, style: const TextStyle(color: Colors.black87)),
@@ -803,7 +803,7 @@ class _AnalyzingScreenState extends State<AnalyzingScreen>
             ),
             const SizedBox(height: 10),
             const Text(
-              "Sistem Terdesentralisasi...",
+              "Decentralized System...",
               style: TextStyle(color: Colors.grey, fontSize: 13),
             ),
           ],
@@ -903,7 +903,7 @@ class ResultScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        'Skor Keyakinan: $confidence%',
+                        'Confidence Score: $confidence%',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -962,7 +962,7 @@ class ResultScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          'Rincian Klinis Optikal',
+                          'Optical Clinical Details',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -976,7 +976,7 @@ class ResultScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Indikator Pucat (Redness Index)',
+                          'Pallor Indicator (Redness Index)',
                           style: TextStyle(fontSize: 13, color: Colors.black87),
                         ),
                         Text(
@@ -992,7 +992,7 @@ class ResultScreen extends StatelessWidget {
                     if (result['color_details'] != null) ...[
                       const Divider(height: 24),
                       const Text(
-                        'Spektrum Analisis Warna (Konjungtiva):',
+                        'Color Analysis Spectrum (Conjunctiva):',
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -1010,7 +1010,7 @@ class ResultScreen extends StatelessWidget {
                             return Column(
                               children: [
                                 _buildMedRow(
-                                  'Eritema / Komponen Merah (R)',
+                                  'Erythema / Red Component (R)',
                                   cData['R'].toStringAsFixed(2),
                                 ),
                                 _buildMedRow(
@@ -1022,19 +1022,19 @@ class ResultScreen extends StatelessWidget {
                                   cData['B'].toStringAsFixed(2),
                                 ),
                                 _buildMedRow(
-                                  'Estimasi Pucat Cahaya (L*)',
+                                  'Lightness Pallor Estimation (L*)',
                                   cData['L'].toStringAsFixed(2),
                                 ),
                                 _buildMedRow(
-                                  'Kromatisitas Merah/Hijau (a*)',
+                                  'Red/Green Chromaticity (a*)',
                                   cData['a'].toStringAsFixed(2),
                                 ),
                                 _buildMedRow(
-                                  'Kromatisitas Kuning/Biru (b*)',
+                                  'Yellow/Blue Chromaticity (b*)',
                                   cData['b'].toStringAsFixed(2),
                                 ),
                                 _buildMedRow(
-                                  'Derajat Hue Optikal (H)',
+                                  'Optical Hue Degree (H)',
                                   '${cData['H'].toStringAsFixed(1)}°',
                                 ),
                                 const SizedBox(height: 12),
@@ -1060,7 +1060,7 @@ class ResultScreen extends StatelessWidget {
                                           ),
                                           SizedBox(width: 6),
                                           Text(
-                                            'Interpretasi AI',
+                                            'AI Interpretation',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12,
@@ -1101,7 +1101,7 @@ class ResultScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          'Saran Kesehatan',
+                          'Health Advice',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -1150,7 +1150,7 @@ class ResultScreen extends StatelessWidget {
                         Icon(Icons.link, color: Colors.white, size: 24),
                         SizedBox(width: 10),
                         Text(
-                          'ID REFERENSI DATA',
+                          'DATA REFERENCE ID',
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
                             color: Colors.white,
@@ -1986,7 +1986,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Daftar Akun Baru'),
+        title: const Text('Register New Account'),
         backgroundColor: const Color(0xFF1E88E5),
         foregroundColor: Colors.white,
         actions: [
@@ -2003,7 +2003,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextField(
               controller: _nikController,
               decoration: const InputDecoration(
-                labelText: 'NIK Lengkap',
+                labelText: 'Full NIK (National ID)',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
