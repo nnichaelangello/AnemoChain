@@ -252,17 +252,24 @@ Five classifiers were trained and evaluated on the Eyes-Defy-Anemia feature matr
    4_start_db_admin.bat
    ```
 
-5. **Run the Mobile app** (development mode):
+5. **Build a distributable APK**:
    ```
-   5_run_mobile.bat
-   ```
-   Ensure your `.env`/app config points to the correct Backend URL/IP if testing on a physical device.
-
-6. **Build a distributable APK**:
-   ```
-   6_build_apk.bat
+   5_build_apk.bat
    ```
 
+### Configuring the Mobile App IP Address
+
+Before running the app on a physical device, you need to point the mobile app to the correct backend server IP address:
+
+1. Open the mobile app — tap the **⚙️ gear icon** in the top-right corner to open Settings.
+2. Set the IP address to match the **IPv4 address of the PC running the backend**.
+3. To find your PC's IPv4 address, open Command Prompt and run:
+   ```
+   ipconfig
+   ```
+   Look for the **IPv4 Address** under your active network adapter (e.g., `192.168.x.x`).
+4. Enter that IP address in the app settings and save.
+   
 ### Typical Usage Flow
 
 1. Open the Mobile app → capture a conjunctiva (inner eyelid) photo.
