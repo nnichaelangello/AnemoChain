@@ -1,7 +1,8 @@
 # AnemoChain (PRISMA)
 
-> **Painless Anemia Screening, Sealed by Blockchain.**
-> *Non-invasive. Trustworthy. Deployable Anywhere.*
+> **1.92 billion people live with anemia. Most can't access a blood test. AnemoChain screens them from a single photo.**
+>
+> *Non-invasive. Tamper-evident. Deployable Anywhere.*
 
 ---
 
@@ -13,14 +14,11 @@
 ![ONNX](https://img.shields.io/badge/ONNX-Runtime-005CED?style=for-the-badge&logo=onnx&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/Scikit--learn-ML-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![XGBoost](https://img.shields.io/badge/XGBoost-Ensemble-189632?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
 ---
 
-## Project Description
-
-### Problem Statement
+## Problem Statement
 
 Anemia is one of the most widespread and underdiagnosed conditions on earth. According to the Global Burden of Disease Study 2021, **approximately 1.92 billion people** — representing **24.3% of the global population** — currently live with anemia, with the burden falling heaviest on children under five and women of reproductive age. [(Source: PMC, 2021)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12459588/)
 
@@ -29,36 +27,95 @@ Despite its scale, frontline diagnosis still depends almost entirely on **invasi
 Two further structural problems compound the diagnostic gap:
 
 **1. Zero input validation in existing non-invasive systems.**
-Published non-invasive approaches in the literature — including the RUSBoost system by Dimauro et al. (2023), the AutoML CNN study by Riazi Esfahani et al. (2026), and the deep ensemble by Sehar et al. (2025) — accept any image fed to them and return a prediction. A photo of a floor, a wall, or a random object would pass through the inference pipeline and silently produce a clinical label. No published system has implemented a mechanism to reject non-ocular or low-quality images before inference, creating a systematic risk of false diagnostic outputs in real-world deployments.
+Published non-invasive approaches — including the RUSBoost system by Dimauro et al. (2023), the AutoML CNN study by Riazi Esfahani et al. (2026), and the deep ensemble by Sehar et al. (2025) — accept any image fed to them and return a prediction. A photo of a floor, a wall, or a random object would pass through the inference pipeline and silently produce a clinical label. No published system has implemented a mechanism to reject non-ocular or low-quality images before inference, creating a systematic risk of false diagnostic outputs in real-world deployments.
 
 **2. No tamper-evident record integrity layer.**
-Electronic medical records are under escalating attack. According to the HIPAA Journal, **hacking-related healthcare data breaches rose 239% and ransomware attacks rose 278% between 2018 and 2023** in the United States alone. [(Source: HIPAA Journal)](https://www.hipaajournal.com/healthcare-data-breach-statistics/) In 2024, the Change Healthcare ransomware attack — the largest healthcare data breach in history — exposed the records of an estimated **192.7 million individuals**. [(Source: HIPAA Journal)](https://www.hipaajournal.com/healthcare-data-breach-statistics/) Meanwhile, **no existing non-invasive anemia system** — across all published literature — includes any mechanism to verify that a stored screening record has not been altered after the fact. Centralized databases can be silently modified; there is currently no audit trail.
+Electronic medical records are under escalating attack. According to the HIPAA Journal, **hacking-related healthcare data breaches rose 239% and ransomware attacks rose 278% between 2018 and 2023** in the United States alone. [(Source: HIPAA Journal)](https://www.hipaajournal.com/healthcare-data-breach-statistics/) In 2024, the Change Healthcare ransomware attack — the largest healthcare data breach in history — exposed the records of an estimated **192.7 million individuals**. [(Source: HIPAA Journal)](https://www.hipaajournal.com/healthcare-data-breach-statistics/) Meanwhile, **no existing non-invasive anemia system** across all published literature includes any mechanism to verify that a stored screening record has not been altered after the fact.
 
 These are not theoretical concerns. They are structural vulnerabilities in every non-invasive anemia system deployed or studied today.
 
 ---
 
-### Solution Overview
+## Solution Overview
 
 **AnemoChain (PRISMA)** is an integrated **AI + Blockchain + Mobile** ecosystem that screens for anemia from a single conjunctiva (inner eyelid) photo — no blood draw required. The system is built on two core design principles that directly address the gaps above:
 
-**1. Two-Layer Image Validation Gate** — before any inference occurs, captured images pass through a pixel-level quality check (luminance thresholding, minimum valid pixel count) and a biological conjunctiva check (red channel dominance, LAB redness `a*`, brightness `L*`, and redness index range). Any image that does not pass both layers is rejected immediately and the user is prompted to retake the photo. This is the **first published non-invasive anemia pipeline with an explicit input validation mechanism** that rejects non-ocular images.
+**1. Two-Layer Image Validation Gate** — before any inference occurs, captured images pass through a pixel-level quality check and a biological conjunctiva check. Any image that does not pass both layers is rejected immediately and the user is prompted to retake the photo. This is the **first published non-invasive anemia pipeline with an explicit input validation mechanism** that rejects non-ocular images.
 
-**2. "Blockchain First, Database Last"** — every prediction is immediately hashed (SHA-256) and sealed into a Hyperledger Fabric blockchain ledger **before** the full record is persisted to a relational database (only upon explicit user confirmation). Any subsequent modification to the database record becomes immediately detectable by cross-checking against the immutable on-chain hash. This provides a **tamper-evident audit trail** that no prior non-invasive anemia system has implemented.
-
----
-
-### Key Features
-
-- 📸 **Mobile image capture** (Flutter) with a **two-layer validation gate** that rejects non-ocular and low-quality photos before they reach the AI model.
-- 🧠 **ML inference pipeline** benchmarking five classifiers (SVM-RBF, Random Forest, KNN, XGBoost, Histogram-based Gradient Boosting) across a 171-feature multi-colorspace matrix (RGB, CIE LAB, HSV, YCbCr + clinical pallor indices), exported to ONNX for lightweight backend inference.
-- ⛓️ **Blockchain-sealed records** — every prediction hash is chained into a Hyperledger Fabric-style ledger prior to database write.
-- 🏥 **Hospital Dashboard** (Flask) for clinicians to review patient history and cryptographically verify that a database record matches its sealed blockchain hash.
-- 🔐 **Anti-manipulation by design** — any tampering with a relational database record will no longer match its sealed blockchain hash, making data corruption self-evident and auditable.
+**2. "Blockchain First, Database Last"** — every prediction is immediately hashed (SHA-256) and sealed into a Hyperledger Fabric blockchain ledger **before** the full record is persisted to a relational database. Any subsequent modification to the database record becomes immediately detectable by cross-checking against the immutable on-chain hash. This provides a **tamper-evident audit trail** that no prior non-invasive anemia system has implemented.
 
 ---
 
-### Technologies Used
+## Key Features
+
+- 📸 **Mobile image capture** (Flutter) with a **two-layer validation gate** that rejects non-ocular and low-quality photos before they reach the AI model
+- 🧠 **ML inference pipeline** benchmarking five classifiers across a 171-feature multi-colorspace matrix (RGB, CIE LAB, HSV, YCbCr + clinical pallor indices), exported to ONNX for lightweight edge inference
+- ⛓️ **Blockchain-sealed records** — every prediction hash is chained into a Hyperledger Fabric-style ledger prior to database write
+- 🏥 **Hospital Dashboard** (Flask) for clinicians to review patient history and cryptographically verify record integrity against the blockchain
+- 🔐 **Anti-manipulation by design** — any tampering with a database record will no longer match its sealed blockchain hash, making data corruption self-evident and auditable
+- 🌐 **Edge-first deployment** — lightweight ONNX model designed for low-resource environments such as community health posts (posyandu) and rural clinics (puskesmas)
+
+---
+
+## Screenshots
+
+### 📱 Mobile Application
+
+| Screenshot | Description |
+|---|---|
+| ![Mobile Landing Page](screenshots/mobile_1_landing_page.png) | **Landing Page** — Main home screen of the PRISMA AnemoChain mobile app. Users can capture a conjunctiva photo directly via camera, upload from gallery, or access their screening history. |
+| ![Screening Result — Status & Preview](screenshots/mobile_2a_result_status.png) | **Screening Result (Status & Image Preview)** — Displays the conjunctiva photo preview alongside the initial clinical status (Anemia Risk or Non-Anemia) processed in real-time using Edge AI. |
+| ![Screening Result — Clinical Detail](screenshots/mobile_2b_result_detail.png) | **Screening Result (Clinical Detail)** — Extended result view showing advanced optical color metrics such as Erythema (R), Lightness (L\*), and Hue, alongside an AI Interpretation and health recommendations for the patient. |
+| ![Invalid Image Error](screenshots/mobile_3_invalid_image.png) | **Invalid Image Handling** — Intuitive error message displayed when the submitted photo is blurry, too dark, or cannot be identified as a human eye by the AI validation system. |
+
+---
+
+### 🏥 Hospital Dashboard
+
+| Screenshot | Description |
+|---|---|
+| ![Dashboard — Valid Data](screenshots/dashboard_1_valid.png) | **Record Verified (No Tampering)** — The Hospital Dashboard when a clinician verifies a patient record. The system validates that the local medical record matches 100% with the hash stored on the Blockchain network, confirming data integrity. |
+| ![Dashboard — Tampered Data](screenshots/dashboard_2_tampered.png) | **Tampering Detected** — The system's protective response when it detects unauthorized modification of a local database record. A `DATA TAMPERED` warning is raised because the local data hash no longer matches the Blockchain. |
+
+---
+
+### ⛓️ Blockchain Ledger
+
+| Screenshot | Description |
+|---|---|
+| ![Blockchain Block View](screenshots/blockchain_1_blocks.png) | **Block View** — The Hyperledger Blockchain Explorer displaying the list of transaction blocks in the network. This demonstrates that every medical record has been decentralized, hashed, and securely stored using blockchain technology. |
+
+---
+
+## Research Flow & System Architecture
+
+<img width="2307" height="1219" alt="Research Flow" src="https://github.com/user-attachments/assets/04b04da5-76f7-41d9-96e6-4bc8901e6567" />
+
+---
+
+## Two-Layer Image Validation
+
+<img width="2291" height="966" alt="Two-Layer Validation" src="https://github.com/user-attachments/assets/404db28a-a82e-43fd-852d-337b7a2235dd" />
+
+Before any feature extraction or ML inference occurs, each submitted image passes through a two-stage gate implemented in the FastAPI backend (`ml_utils.py`):
+
+**Layer 1 — Pixel Quality Check**
+- Image is resized to 256 × 256 pixels
+- Mean luminance is computed
+- The image must contain **≥ 500 valid (non-masked) pixels** to proceed
+
+**Layer 2 — Biological Conjunctiva Check**
+The image must satisfy all four constraints simultaneously:
+- **Red dominance**: `mean_R > mean_B` (conjunctiva tissue is redder than blue)
+- **LAB redness**: `a* ≥ 5.0` (positive a\* axis = redness in CIE LAB space)
+- **Brightness**: `25.0 ≤ L* ≤ 90.0` (valid tissue luminance range)
+- **Redness index**: `0.30 ≤ index ≤ 1.80`
+
+If **any** of the eight checks across both layers fails, the image is rejected and the user is prompted to retake the photo. Only images passing all checks proceed to feature extraction and inference.
+
+---
+
+## Technologies Used
 
 | Layer | Technology |
 |---|---|
@@ -67,44 +124,7 @@ These are not theoretical concerns. They are structural vulnerabilities in every
 | Blockchain Layer | FastAPI-based ledger node (Hyperledger Fabric–style: peers + ordering service) |
 | Hospital Dashboard | Flask, Jinja2, Tailwind CSS |
 | Mobile App | Flutter / Dart |
-| Dataset | [Eyes-Defy-Anemia](https://doi.org/10.21227/T5S2-4J73) (Italy n=123, India n=95) |
-
----
-
-### Target Users
-
-- **Community health workers & clinics in low-resource settings**, where lab infrastructure for routine blood draws is limited or unavailable.
-- **Hospitals and clinicians** who need an auditable, tamper-evident patient record system alongside a rapid pre-screening tool.
-- **Public health / NGO screening programs** aiming to conduct mass, low-cost anemia pre-screening among pregnant women and children under five.
-- **Researchers** studying non-invasive hemoglobin/pallor estimation, who can reuse the open feature-extraction and benchmarking pipeline.
-
----
-
-## Research FLow & System Architecture
-
-<img width="2307" height="1219" alt="1  Research Flow" src="https://github.com/user-attachments/assets/04b04da5-76f7-41d9-96e6-4bc8901e6567" />
-
----
-
-## Two-Layer Image Validation
-
-<img width="2291" height="966" alt="2  Validasi Foto" src="https://github.com/user-attachments/assets/404db28a-a82e-43fd-852d-337b7a2235dd" />
-
-Before any feature extraction or ML inference occurs, each submitted image passes through a two-stage gate implemented in the FastAPI backend (`ml_utils.py`):
-
-**Layer 1 — Pixel Quality Check**
-- Image is resized to 256 × 256 pixels.
-- Mean luminance is computed.
-- The image must contain **≥ 500 valid (non-masked) pixels** to proceed.
-
-**Layer 2 — Biological Conjunctiva Check**
-The image must satisfy all four constraints simultaneously:
-- **Red dominance**: `mean_R > mean_B` (conjunctiva tissue is redder than blue)
-- **LAB redness**: `a* ≥ 5.0` (positive a* axis = redness in CIE LAB space)
-- **Brightness**: `25.0 ≤ L* ≤ 90.0` (valid tissue luminance range)
-- **Redness index**: `0.30 ≤ index ≤ 1.80`
-
-If **any** of the eight checks across both layers fails, the image is rejected and the user is prompted to retake the photo. Only images that pass all checks proceed to feature extraction and inference.
+| Dataset | Eyes-Defy-Anemia (Italy n=123, India n=95) — see [Dataset Citation](#dataset-citation) |
 
 ---
 
@@ -165,16 +185,36 @@ Five classifiers were trained and evaluated on the Eyes-Defy-Anemia feature matr
 
 | Author (Year) | Objective | Methodology | Identified Gaps |
 |---|---|---|---|
-| [Dimauro et al. (2023)](https://doi.org/10.1016/j.artmed.2022.102477) | Automated diagnosis exploiting the Eyes-Defy-Anemia dataset | RUSBoost handling imbalanced data with 14 color features | No input validation; no mobile integration; no record integrity mechanism. |
-| [Riazi Esfahani et al. (2026)](https://doi.org/10.1002/ajh.70143) | Comparative training analysis using deep neural networks | AutoML CNN evaluating full-eye vs. palpebral configurations | Closed-box AutoML prevents edge inference; no mobile integration; no anti-manipulation security. |
-| [Sehar et al. (2025)](https://doi.org/10.4258/hir.2025.31.1.57) | Deep learning–based detection from conjunctiva images | DCGAN augmentation + SLIC segmentation + stacking ensemble | Computationally prohibitive for mobile devices; no input rejection logic; no blockchain integrity layer. |
+| [Dimauro et al. (2023)](https://doi.org/10.1016/j.artmed.2022.102477) | Automated diagnosis exploiting the Eyes-Defy-Anemia dataset | RUSBoost handling imbalanced data with 14 color features | No input validation; no mobile integration; no record integrity mechanism |
+| [Riazi Esfahani et al. (2026)](https://doi.org/10.1002/ajh.70143) | Comparative training analysis using deep neural networks | AutoML CNN evaluating full-eye vs. palpebral configurations | Closed-box AutoML prevents edge inference; no mobile integration; no anti-manipulation security |
+| [Sehar et al. (2025)](https://doi.org/10.4258/hir.2025.31.1.57) | Deep learning–based detection from conjunctiva images | DCGAN augmentation + SLIC segmentation + stacking ensemble | Computationally prohibitive for mobile devices; no input rejection logic; no blockchain integrity layer |
 
 **Discussion:**
-- AnemoChain's classical ML pipeline (HistGradientBoosting) achieves a **more balanced sensitivity/specificity trade-off** than the 2023 RUSBoost baseline (0.80/0.83 vs. 0.66/0.91) and than the 2026 AutoML CNN study (0.80/0.83 vs. 1.00/0.67, which sacrifices specificity almost entirely for sensitivity).
-- Its AUC (0.9153) sits between the RUSBoost-era baseline and the computationally heavy deep-learning ensemble of Sehar et al. (AUC 0.97), which relies on GAN-based augmentation (764 → 4,315 images) and a CNN ensemble (VGG16 + ResNet-50 + InceptionV3) — a strategy that trades computational cost and model size for higher raw AUC.
-- AnemoChain deliberately favors a **lightweight, ONNX-exportable classical model** over deep CNN ensembles, prioritizing feasibility of on-device and edge inference for low-resource deployment over squeezing out additional AUC points.
-- **AnemoChain is the only system in this comparison that integrates all three missing components**: a mobile application for real-world image capture, a blockchain layer for record tamper-detection, and an explicit input validation gate that rejects non-ocular images before inference.
-- Direct comparison of classification metrics across studies should be interpreted with caution: all four studies use different subsets, splits, and preprocessing of the same underlying Eyes-Defy-Anemia dataset, and sample sizes remain small (n ≈ 95–218), a limitation acknowledged across the literature.
+- AnemoChain's classical ML pipeline achieves a **more balanced sensitivity/specificity trade-off** than the 2023 RUSBoost baseline (0.80/0.83 vs. 0.66/0.91) and the 2026 AutoML CNN study (0.80/0.83 vs. 1.00/0.67, which sacrifices specificity almost entirely for sensitivity).
+- Its AUC (0.9153) sits between the RUSBoost-era baseline and the computationally heavy deep-learning ensemble of Sehar et al. (AUC 0.97), which relies on GAN-based augmentation (764 → 4,315 images) and a CNN ensemble (VGG16 + ResNet-50 + InceptionV3).
+- AnemoChain deliberately favors a **lightweight, ONNX-exportable classical model** over deep CNN ensembles, prioritizing feasibility of edge inference for low-resource deployment over squeezing out additional AUC points.
+- **AnemoChain is the only system in this comparison integrating all three missing components**: a mobile application, a blockchain tamper-detection layer, and an explicit input validation gate.
+- Direct metric comparison should be interpreted with caution: all four studies use different subsets, splits, and preprocessing of the same underlying dataset, and sample sizes remain small (n ≈ 95–218).
+
+---
+
+## Limitations & Future Work
+
+### Current Limitations
+
+- **Small dataset**: The Eyes-Defy-Anemia dataset contains only n ≈ 218 samples from two cohorts (Italy, India), which limits generalizability across diverse populations and lighting conditions.
+- **Not clinical-grade**: This system is designed as a pre-screening and triage tool, not a replacement for laboratory hemoglobin measurement. Results should always be confirmed by a trained medical professional.
+- **Lighting sensitivity**: Conjunctiva color is affected by ambient lighting conditions. The validation gate mitigates extreme cases but does not fully account for all real-world lighting variability.
+- **Single-eye input**: The current model accepts a single conjunctiva image; bilateral comparison (both eyes) may improve robustness.
+- **Windows-only scripts**: The provided `.bat` deployment scripts are Windows-only; Linux/macOS equivalents have not yet been packaged.
+
+### Future Work
+
+- Expand training data through multi-country field collection, particularly from Southeast Asian populations (Indonesia, Philippines, Vietnam) where anemia prevalence among pregnant women and children remains high.
+- Integrate hemoglobin (Hb g/dL) regression alongside binary classification to provide a quantitative severity estimate.
+- Explore on-device ONNX inference within the Flutter app to enable fully offline screening with zero backend dependency.
+- Pursue clinical validation study in partnership with community health facilities (posyandu/puskesmas) to assess real-world diagnostic performance.
+- Replace the simulated Hyperledger Fabric–style ledger with a production Hyperledger Fabric deployment for enterprise-grade auditability.
 
 ---
 
@@ -234,6 +274,31 @@ Five classifiers were trained and evaluated on the Eyes-Defy-Anemia feature matr
 
 ---
 
+## Dataset Citation
+
+The machine learning models in this project were trained on the **Eyes-Defy-Anemia** dataset:
+
+> Giovanni Dimauro, Rosalia Maglietta, Thulasi Bai, Sivachandar Kasiviswanathan, "Eyes-defy-anemia," *IEEE Dataport*, January 31, 2022. doi:[10.21227/t5s2-4j73](https://doi.org/10.21227/T5S2-4J73)
+
+We gratefully acknowledge the dataset authors for making this resource publicly available to the research community.
+
+---
+
+## Target Users
+
+- **Community health workers & clinics in low-resource settings** (posyandu, puskesmas), where lab infrastructure for routine blood draws is limited or unavailable
+- **Hospitals and clinicians** who need an auditable, tamper-evident patient record system alongside a rapid pre-screening tool
+- **Public health / NGO screening programs** conducting mass, low-cost anemia pre-screening among pregnant women and children under five
+- **Researchers** studying non-invasive hemoglobin/pallor estimation, who can reuse the open feature-extraction and benchmarking pipeline
+
+---
+
 ## Team
 
 **Solo Developer:** Michael Angello Qadosy Riyadi
+
+> All system components — machine learning pipeline, FastAPI backend, blockchain ledger node, Flask hospital dashboard, and Flutter mobile application — were designed, built, and integrated independently as a solo submission.
+
+---
+
+*Built for the ML Empowerment Build Challenge · MIT License*
