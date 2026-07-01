@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospital E-Health Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-blue-700 mb-6">Hospital Dashboard (EHR)</h1>
+        
+        <div class="bg-white p-6 rounded shadow mb-6">
+            <h2 class="text-xl mb-4">Patient Data Search</h2>
+            <div class="flex gap-4">
+                <input type="text" id="patientId" class="border p-2 rounded flex-1" placeholder="Enter Patient ID (e.g., 35780123...)">
+                <button onclick="searchPatient()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded">Fetch Patient Data</button>
+            </div>
+        </div>
+
+        <div id="results" class="hidden space-y-6">
+            <!-- Results will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        async function searchPatient() {
+            const patientId = document.getElementById('patientId').value;
+            const resDiv = document.getElementById('results');
+            resDiv.innerHTML = '<p class="text-gray-600">Connecting to server...</p>';
+            resDiv.classList.remove('hidden');
+
+            try {
+                const response = await fetch(`{{ backend_url }}/api/screenings/${patientId}`);
+                if (!response.ok) {
+                    resDiv.innerHTML = '<p class="text-red-500">Patient not found in the hospital database.</p>';
+                    return;
+                }
+                const data = await response.json();
+                
+                let html = '<h3 class="text-2xl font-semibold">Screening History (Local Database)</h3>';
+                data.forEach(record => {
+                    html += `
+                    <div class="bg-white p-6 rounded shadow border-l-4 border-blue-500">
+                        <p><strong>Timestamp:</strong> ${new Date(record.timestamp).toLocaleString()}</p>
+                        <p><strong>Clinical Status:</strong> ${record.anemia_status} (AI Confidence: ${(record.confidence_score*100).toFixed(1)}%)</p>
+                        <p><strong>Pallor Indicator (Redness Index):</strong> ${record.redness_index.toFixed(4)}</p>
+                        ${(function() {
+                            if (!record.color_details) return '';
+                            try {
+                                let c = JSON.parse(record.color_details);
+                                if (typeof c === 'string') c = JSON.parse(c); // Handle double-encoded JSON safely
+                                return `
+                                <div class="mt-4 border border-blue-200 rounded overflow-hidden">
+                                    <div class="bg-blue-50 px-4 py-2 border-b border-blue-200">
+                                        <p class="font-bold text-blue-800 text-sm">Optical Clinical Details</p>
+                                    </div>
+                                    <div class="bg-white p-4 grid grid-cols-2 gap-4 text-sm">
+                                        <div><span class="text-gray-500">Red (R):</span> <span class="font-semibold">${c.R.toFixed(1)}</span></div>
+                                        <div><span class="text-gray-500">Green (G):</span> <span class="font-semibold">${c.G.toFixed(1)}</span></div>
+                                        <div><span class="text-gray-500">Blue (B):</span> <span class="font-semibold">${c.B.toFixed(1)}</span></div>
+                                        <div><span class="text-gray-500">Lightness (L*):</span> <span class="font-semibold">${(c.L || 0).toFixed(2)}</span></div>
+                                        <div><span class="text-gray-500">Chromaticity (a*):</span> <span class="font-semibold">${(c.a || 0).toFixed(2)}</span></div>
+                                        <div><span class="text-gray-500">Chromaticity (b*):</span> <span class="font-semibold">${(c.b || 0).toFixed(2)}</span></div>
+                                        <div><span class="text-gray-500">Hue (H):</span> <span class="font-semibold">${(c.H || 0).toFixed(2)}°</span></div>
+                                    </div>
+                                </div>
+                                `;
+                            } catch (e) {
+                                return '';
+                            }
+                        })()}
+                        
+                        <div class="mt-4 p-4 bg-gray-50 rounded">
+                            ${record.image_url ? `<div class="mb-4"><p class="text-sm font-bold mb-2">Medical Photo (Conjunctiva Eye):</p><img src="{{ backend_url }}${record.image_url}" alt="Medical Evidence" class="w-48 h-auto rounded shadow border border-gray-300"></div>` : `<p class="text-sm text-yellow-600 mb-4 italic">Medical photo has not been uploaded from the patient's device.</p>`}
+                            
+                            <p class="text-xs text-gray-500 break-all mb-3"><strong>Database SHA-256 Hash:</strong><br/> <span id="db-hash-${record.id}" class="font-mono">${record.data_hash}</span></p>
+                            <button onclick="verifyHash('${patientId}', '${record.data_hash}', 'status-${record.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded text-sm shadow">
+                                🔐 Anti-Tamper Validation with Hyperledger
+                            </button>
+                            <p id="status-${record.id}" class="mt-3 font-bold text-sm"></p>
+                        </div>
+                    </div>
+                    `;
+                });
+                resDiv.innerHTML = html;
+            } catch (e) {
+                resDiv.innerHTML = '<p class="text-red-500">Error connecting to Backend Server.</p>';
+            }
+        }
+
+        async function verifyHash(patientId, dbHash, statusElementId) {
+            const statusEl = document.getElementById(statusElementId);
+            statusEl.innerText = "Verifying Hash with Hyperledger Network...";
+            statusEl.className = "mt-3 font-bold text-sm text-gray-600";
+            
+            try {
+                const response = await fetch(`{{ blockchain_url }}/api/ledger/${patientId}`);
+                if (!response.ok) {
+                    statusEl.innerText = "✗ DATA TAMPERED / INVALID (Record trace not found on Blockchain!)";
+                    statusEl.className = "mt-3 font-bold text-sm text-red-600";
+                    return;
+                }
+                const data = await response.json();
+                
+                // Check if dbHash is identical to the one sealed in blockchain
+                let isValid = false;
+                data.transactions.forEach(tx => {
+                    if (tx.data_hash === dbHash) isValid = true;
+                });
+
+                if (isValid) {
+                    statusEl.innerHTML = "✓ <span class='text-green-600'>VALID</span> (Data is 100% consistent with Hyperledger Blockchain. No manipulation detected.)";
+                } else {
+                    statusEl.innerHTML = "✗ <span class='text-red-600'>DATA TAMPERED</span> (Data in local database has been modified! Hash does not match Blockchain.)";
+                }
+            } catch (e) {
+                statusEl.innerText = "Failed to contact Hyperledger Network Node.";
+                statusEl.className = "mt-3 font-bold text-sm text-red-600";
+            }
+        }
+    </script>
+</body>
+</html>
