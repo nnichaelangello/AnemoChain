@@ -63,10 +63,10 @@ These are not theoretical concerns. They are structural vulnerabilities in every
 
 | Screenshot | Description |
 |---|---|
-| ![Mobile Landing Page](screenshots/mobile_1_landing_page.png) | **Landing Page** — Main home screen of the PRISMA AnemoChain mobile app. Users can capture a conjunctiva photo directly via camera, upload from gallery, or access their screening history. |
-| ![Screening Result — Status & Preview](screenshots/mobile_2a_result_status.png) | **Screening Result (Status & Image Preview)** — Displays the conjunctiva photo preview alongside the initial clinical status (Anemia Risk or Non-Anemia) processed in real-time using Edge AI. |
-| ![Screening Result — Clinical Detail](screenshots/mobile_2b_result_detail.png) | **Screening Result (Clinical Detail)** — Extended result view showing advanced optical color metrics such as Erythema (R), Lightness (L\*), and Hue, alongside an AI Interpretation and health recommendations for the patient. |
-| ![Invalid Image Error](screenshots/mobile_3_invalid_image.png) | **Invalid Image Handling** — Intuitive error message displayed when the submitted photo is blurry, too dark, or cannot be identified as a human eye by the AI validation system. |
+| <img width="720" height="1600" alt="WhatsApp Image 2026-07-02 at 13 43 59" src="https://github.com/user-attachments/assets/42343c64-23d2-4f2c-ba12-9ad901754477" /> | **Landing Page** — Main home screen of the PRISMA AnemoChain mobile app. Users can capture a conjunctiva photo directly via camera, upload from gallery, or access their screening history. |
+| <img width="720" height="1600" alt="WhatsApp Image 2026-07-02 at 13 43 59 (1)" src="https://github.com/user-attachments/assets/71ecae56-b6d5-4f64-a605-8ae040c7a8a0" /> | **Screening Result (Status & Image Preview)** — Displays the conjunctiva photo preview alongside the initial clinical status (Anemia Risk or Non-Anemia) processed in real-time using Edge AI. |
+| <img width="720" height="1600" alt="WhatsApp Image 2026-07-02 at 13 43 59 (2)" src="https://github.com/user-attachments/assets/7c00ae22-bb16-4eba-a384-2e1e44695412" /> | **Screening Result (Clinical Detail)** — Extended result view showing advanced optical color metrics such as Erythema (R), Lightness (L\*), and Hue, alongside an AI Interpretation and health recommendations for the patient. |
+| <img width="720" height="1600" alt="WhatsApp Image 2026-07-02 at 13 44 00" src="https://github.com/user-attachments/assets/c7a7ca87-39d0-4d1d-8113-2aa77d93b2be" /> | **Invalid Image Handling** — Intuitive error message displayed when the submitted photo is blurry, too dark, or cannot be identified as a human eye by the AI validation system. |
 
 ---
 
@@ -74,8 +74,8 @@ These are not theoretical concerns. They are structural vulnerabilities in every
 
 | Screenshot | Description |
 |---|---|
-| ![Dashboard — Valid Data](screenshots/dashboard_1_valid.png) | **Record Verified (No Tampering)** — The Hospital Dashboard when a clinician verifies a patient record. The system validates that the local medical record matches 100% with the hash stored on the Blockchain network, confirming data integrity. |
-| ![Dashboard — Tampered Data](screenshots/dashboard_2_tampered.png) | **Tampering Detected** — The system's protective response when it detects unauthorized modification of a local database record. A `DATA TAMPERED` warning is raised because the local data hash no longer matches the Blockchain. |
+| <img width="1901" height="1198" alt="image" src="https://github.com/user-attachments/assets/509af8e8-971b-443b-83f6-8cde307ea2ce" /> | **Record Verified (No Tampering)** — The Hospital Dashboard when a clinician verifies a patient record. The system validates that the local medical record matches 100% with the hash stored on the Blockchain network, confirming data integrity. |
+| <img width="1895" height="1198" alt="image" src="https://github.com/user-attachments/assets/d49f8905-d05f-4e65-8051-9f496d90f1f1" /> | **Tampering Detected** — The system's protective response when it detects unauthorized modification of a local database record. A `DATA TAMPERED` warning is raised because the local data hash no longer matches the Blockchain. |
 
 ---
 
@@ -83,7 +83,7 @@ These are not theoretical concerns. They are structural vulnerabilities in every
 
 | Screenshot | Description |
 |---|---|
-| ![Blockchain Block View](screenshots/blockchain_1_blocks.png) | **Block View** — The Hyperledger Blockchain Explorer displaying the list of transaction blocks in the network. This demonstrates that every medical record has been decentralized, hashed, and securely stored using blockchain technology. |
+| <img width="1901" height="1198" alt="image" src="https://github.com/user-attachments/assets/0b94a2d0-7f8c-4b74-b132-9cdba9540707" /> | **Block View** — The Hyperledger Blockchain Explorer displaying the list of transaction blocks in the network. This demonstrates that every medical record has been decentralized, hashed, and securely stored using blockchain technology. |
 
 ---
 
