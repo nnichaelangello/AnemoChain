@@ -300,12 +300,4 @@ We gratefully acknowledge the dataset authors for making this resource publicly 
 
 ---
 
-## Team
-
-**Solo Developer:** Michael Angello Qadosy Riyadi
-
-> All system components — machine learning pipeline, FastAPI backend, blockchain ledger node, Flask hospital dashboard, and Flutter mobile application — were designed, built, and integrated independently as a solo submission.
-
----
-
 *Built for the ML Empowerment Build Challenge · MIT License*
