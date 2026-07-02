@@ -1,4 +1,4 @@
-# AnemoChain (PRISMA)
+# AnemoChain
 
 > **1.92 billion people live with anemia. Most can't access a blood test. AnemoChain screens them from a single photo.**
 >
@@ -38,7 +38,7 @@ These are not theoretical concerns. They are structural vulnerabilities in every
 
 ## Solution Overview
 
-**AnemoChain (PRISMA)** is an integrated **AI + Blockchain + Mobile** ecosystem that screens for anemia from a single conjunctiva (inner eyelid) photo — no blood draw required. The system is built on two core design principles that directly address the gaps above:
+**AnemoChain** is an integrated **AI + Blockchain + Mobile** ecosystem that screens for anemia from a single conjunctiva (inner eyelid) photo — no blood draw required. The system is built on two core design principles that directly address the gaps above:
 
 **1. Two-Layer Image Validation Gate** — before any inference occurs, captured images pass through a pixel-level quality check and a biological conjunctiva check. Any image that does not pass both layers is rejected immediately and the user is prompted to retake the photo. This is the **first published non-invasive anemia pipeline with an explicit input validation mechanism** that rejects non-ocular images.
 
@@ -63,7 +63,7 @@ These are not theoretical concerns. They are structural vulnerabilities in every
 
 | Screenshot | Description |
 |---|---|
-| <img width="720" height="1600" alt="WhatsApp Image 2026-07-02 at 13 43 59" src="https://github.com/user-attachments/assets/42343c64-23d2-4f2c-ba12-9ad901754477" /> | **Landing Page** — Main home screen of the PRISMA AnemoChain mobile app. Users can capture a conjunctiva photo directly via camera, upload from gallery, or access their screening history. |
+| <img width="720" height="1600" alt="WhatsApp Image 2026-07-02 at 13 43 59" src="https://github.com/user-attachments/assets/42343c64-23d2-4f2c-ba12-9ad901754477" /> | **Landing Page** — Main home screen of the AnemoChain mobile app. Users can capture a conjunctiva photo directly via camera, upload from gallery, or access their screening history. |
 | <img width="720" height="1600" alt="WhatsApp Image 2026-07-02 at 13 43 59 (1)" src="https://github.com/user-attachments/assets/71ecae56-b6d5-4f64-a605-8ae040c7a8a0" /> | **Screening Result (Status & Image Preview)** — Displays the conjunctiva photo preview alongside the initial clinical status (Anemia Risk or Non-Anemia) processed in real-time using Edge AI. |
 | <img width="720" height="1600" alt="WhatsApp Image 2026-07-02 at 13 43 59 (2)" src="https://github.com/user-attachments/assets/7c00ae22-bb16-4eba-a384-2e1e44695412" /> | **Screening Result (Clinical Detail)** — Extended result view showing advanced optical color metrics such as Erythema (R), Lightness (L\*), and Hue, alongside an AI Interpretation and health recommendations for the patient. |
 | <img width="720" height="1600" alt="WhatsApp Image 2026-07-02 at 13 44 00" src="https://github.com/user-attachments/assets/c7a7ca87-39d0-4d1d-8113-2aa77d93b2be" /> | **Invalid Image Handling** — Intuitive error message displayed when the submitted photo is blurry, too dark, or cannot be identified as a human eye by the AI validation system. |
@@ -179,7 +179,7 @@ Five classifiers were trained and evaluated on the Eyes-Defy-Anemia feature matr
 | [Dimauro et al. (2023)](https://doi.org/10.1016/j.artmed.2022.102477) — RUSBoost, palpebral conjunctiva | 0.8800 | 0.6600 | 0.9100 | — | ✗ | ✗ | ✗ |
 | [Riazi Esfahani et al. (2026)](https://doi.org/10.1002/ajh.70143) — AutoML CNN, Full → Palpebral | — | 1.0000 | 0.6700 | 0.8990 | ✗ | ✗ | ✗ |
 | [Sehar et al. (2025)](https://doi.org/10.4258/hir.2025.31.1.57) — Stacking Ensemble (VGG16 + ResNet-50 + InceptionV3, DCGAN-augmented) | 0.8948 | — | — | 0.9700 | ✗ | ✗ | ✗ |
-| **AnemoChain / PRISMA (this project)** — HistGradientBoosting, avg. across splits | **0.8201** | **0.7965** | **0.8333** | **0.9153** | ✅ | ✅ | ✅ |
+| **AnemoChain (this project)** — HistGradientBoosting, avg. across splits | **0.8201** | **0.7965** | **0.8333** | **0.9153** | ✅ | ✅ | ✅ |
 
 ### Critical Gap Analysis
 
